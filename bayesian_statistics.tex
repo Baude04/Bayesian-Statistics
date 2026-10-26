@@ -21,6 +21,8 @@
 % accolade grise (pour les annotations grises)
 \newcommand{\gunderbrace}[2]{{\color{gray}\underbrace{\color{black}#1}_{#2}}}
 \newcommand{\circled}[1]{\tikz[baseline=(c.base)]\node[draw,circle,inner sep=0.6pt,font=\scriptsize](c){#1};}
+% Parties à rédiger à la main
+\newcommand{\tocomplete}[1][]{\noindent\textcolor{red}{\textbf{TO COMPLETE\ifx&#1&\else: #1\fi}}}
 
 
 % Configuration des listes
@@ -60,6 +62,7 @@ frametitleaboveskip=\dimexpr-\ht\strutbox\relax
 \newmdtheorem{theorem}{Theorem}{red!25}
 \newmdtheorem{lemma}{Lemma}{yellow!50}
 \newmdtheorem{proposition}{Proposition}{orange!30}
+\newmdtheorem{corollary}{Corollary}{orange!60}
 
 % Preuve et barres verticales
 % Les barres sont faites avec leftbar du package framed (\MakeFramed). framed
@@ -185,6 +188,8 @@ frametitleaboveskip=\dimexpr-\ht\strutbox\relax
 \newmdbox{intuition}{Intuition}{green!30}
 
 \begin{document}
+
+\part{Bayesian Modelling and Decision Theory}
 
 \section{Bayesian Formulation}
 
@@ -388,7 +393,187 @@ Loss: $l(\theta, \delta) = 1 \text{ if } \theta \neq \delta$, and $=0 \text{ if 
 \[ \delta^\pi(x) = \text{argmin}_\delta (1 - \pi(\delta|x)) = \text{argmax}_k \pi(k|x) \]
 \end{example}
 
+\subsection{Admissibility}
+
+\begin{definition}[Admissibility]
+\tocomplete
+\end{definition}
+
+\begin{example}[The MLE is not admissible for $d = 3$]
+\tocomplete
+\end{example}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\subsection{Intrinsic Losses}
+\tocomplete
+
+\begin{example}[Kullback--Leibler Divergence]
+\tocomplete
+\end{example}
+\begin{proof}[Proof (invariance of the KL divergence)]
+\tocomplete
+\end{proof}
+
+\subsection{The MAP Estimator in Dominated Models}
+\tocomplete
+
+\begin{definition}[Maximum A Posteriori (MAP) Estimator]
+\tocomplete
+\end{definition}
+
+\noindent\textbf{Remark:} \tocomplete
+
+\noindent\textbf{Exercise (MAP estimator, exponential model with Gamma prior):} \tocomplete
+
+\subsection{Improper Priors}
+
+\begin{definition}[Improper Prior]
+\tocomplete
+\end{definition}
+
+\begin{example}[Lebesgue Measure on $\mathbb{R}$]
+\tocomplete
+\end{example}
+
+\tocomplete[posterior distribution associated with an improper prior]
+
+\begin{example}[Flat Prior on a Normal Mean]
+\tocomplete
+\end{example}
+
+\noindent\textbf{Exercise (normal model with prior $\pi(\mu, \sigma^2) = 1/\sigma^2$):} \tocomplete
+
+\begin{example}[Haldane Prior for a Bernoulli Model]
+\tocomplete
+\end{example}
+
+\subsubsection{Jeffreys Prior}
+\tocomplete[why use improper priors, flatness and parametrization]
+
+\begin{definition}[Jeffreys Prior]
+\tocomplete
+\end{definition}
+
+\begin{proposition}[Invariance under Reparametrization]
+\tocomplete
+\end{proposition}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\noindent\textbf{Exercise (Jeffreys prior for $\mathcal{N}(\mu, 1)$):} \tocomplete
+
+\subsection{Nuisance Parameters: Marginal Likelihoods}
+
+\begin{definition}[Marginal Likelihood and Profile Likelihood]
+\tocomplete
+\end{definition}
+
+\begin{example}[Normal Model with Unknown Variance]
+\tocomplete
+\end{example}
+
+\subsection{Bayesian Tests}
+\tocomplete
+
+\begin{example}[Test in a Linear Regression]
+\tocomplete
+\end{example}
+
+\tocomplete[Bayes test under the 0-1 loss]
+
+\begin{definition}[Bayes Factor]
+\tocomplete
+\end{definition}
+
+\noindent\textbf{Remark (Bayes test and Bayes factor):} \tocomplete
+
+\begin{example}[Two Simple Hypotheses]
+\tocomplete
+\end{example}
+
+\begin{example}[Point Null Hypothesis]
+\tocomplete
+\end{example}
+
+\noindent\textbf{Remark (marginal likelihoods $m_0$ and $m_1$):} \tocomplete
+
+\begin{proposition}[Bayes Test, General Case]
+\tocomplete
+\end{proposition}
+
+\noindent\textbf{Remark (improper priors and the Bayes test):} \tocomplete
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\subsection{Model Selection}
+\tocomplete
+
+\begin{example}[Variable Selection in Linear Regression]
+\tocomplete
+\end{example}
+
+\noindent\textbf{Exercise (posterior distribution on the model $\gamma$):} \tocomplete
+
+\begin{example}[Number of Components in a Mixture]
+\tocomplete
+\end{example}
+
+\subsection{Other Losses for Tests}
+\tocomplete
+
+\noindent\textbf{Exercise (Bayes estimator for this loss):} \tocomplete
+
+\subsection{Credible Regions}
+
+\begin{definition}[Confidence Region (Frequentist Recall)]
+\tocomplete
+\end{definition}
+
+\begin{definition}[Credible Region]
+\tocomplete
+\end{definition}
+
+\begin{lemma}[Credible Regions are Confidence Regions on Average]
+\tocomplete
+\end{lemma}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\begin{example}[Equal-Tail Credible Interval]
+\tocomplete
+\end{example}
+
+\begin{example}[Credible Interval in the Normal Model]
+\tocomplete
+\end{example}
+
+\begin{definition}[Highest Posterior Density (HPD) Region]
+\tocomplete
+\end{definition}
+
+\begin{theorem}[HPD Regions Minimize the Volume]
+\tocomplete
+\end{theorem}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\begin{example}[Computation of an HPD Region]
+\tocomplete
+\end{example}
+
+\part{Consistency and Convergence Rate}
+
 \section{Consistency}
+
+\tocomplete[reminder on consistency of an estimator in frequentist evaluation]
+
+\subsection{Definition}
 
 Let $X_{1:n} \sim P_\theta^{(n)}$, $\theta \in \Theta$, $(\Theta, d)$ = metric Polish space.
 
@@ -398,6 +583,8 @@ $\pi$ = proba prior and $\pi(\cdot \mid X^{(n)}) \equiv$ posterior distribution.
 The posterior is a.s. \emph{consistent at $\theta_0$} (w.r.t. the metric $d$) iff
 \[ \forall \varepsilon > 0, \quad \pi\big(\{\theta,\ d(\theta,\theta_0) \le \varepsilon\} \,\big|\, X^{(n)}\big) \xrightarrow[n\to\infty]{} 1 \quad P_{\theta_0}^{(\infty)} \text{ a.s.} \]
 \end{definition}
+
+\tocomplete[consistency in probability]
 
 \begin{intuition}
 $X_{1:n} \sim P_{\theta_0}^{(n)}$
@@ -570,6 +757,10 @@ So we got the conclusion by applying (i).
 
 \subsection{Applications of Schwartz Theorem}
 
+\subsubsection{The $L^1$ Metric}
+
+\noindent\textbf{Remark ($L^1$ distance and total variation):} \tocomplete
+
 \begin{theorem}\label{thm:tests}
 Let $\Theta_n \subset \Theta$ be such that
 \[ \log N\Big(\frac{\varepsilon}{4}, \mathcal{P}_{\Theta_n}, \|\cdot\|_1\Big) \le \frac{n\varepsilon^2}{16}, \]
@@ -598,6 +789,8 @@ we have
 \end{itemize}
 Hence $\pi(\{\theta : d(\theta, \theta_0) > \varepsilon\} \mid X^{(n)}) \longrightarrow 0$ $P_{\theta_0}^{\infty}$ a.s. for every $\varepsilon > 0$, which is the consistency at $\theta_0$.
 \end{proof}
+
+\noindent\textbf{Remark (testing $H_0: \theta = \theta_0$ against $H_1: d(\theta, \theta_0) > \varepsilon$):} \tocomplete
 
 \begin{intuition}[Proof Intuition for Theorem~\ref{thm:tests}]
 Let $A_n := \Theta_n \cap \{\|f_\theta - f_{\theta_0}\|_1 > \varepsilon\}$. The proof consist in covering $A_n$ with a certain number of balls centered in $\theta_i$ with $i \in \{1, \dots, N(\varepsilon/4; A_n; \|\cdot\|_1)\}$, then on each of these balls we construct a local test, $\phi_{n,\theta_i}$, then by taking $\phi_n := \max_i \phi_{n,i}$, we got the good $\phi_n$.
@@ -743,5 +936,89 @@ So by Borel--Cantelli $\phi_n \xrightarrow[n\to\infty]{P_{\theta_0} \text{ a.s.}
 \end{leftbar}
 \end{leftbar}
 \end{proof}
+
+\subsubsection{Hellinger Tests}
+
+\begin{theorem}[Existence of Hellinger Tests]
+\tocomplete
+\end{theorem}
+
+\begin{corollary}[Tests for the Hellinger Distance]
+\tocomplete
+\end{corollary}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\subsection{Parametric Models}
+\tocomplete
+
+\begin{theorem}[Consistency in Parametric Models]
+\tocomplete
+\end{theorem}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\begin{example}[Normal Location Model]
+\tocomplete
+\end{example}
+
+\begin{example}[Uniform Model $\mathcal{U}({[0, \theta]})$]
+\tocomplete
+\end{example}
+
+\section{Posterior Convergence Rate}
+
+\subsection{Definitions and Theorem}
+
+\begin{definition}[Posterior Contraction Rate]
+\tocomplete
+\end{definition}
+
+\begin{intuition}
+\tocomplete
+\end{intuition}
+
+\begin{theorem}[Posterior Contraction Rate]\label{thm:rate}
+\tocomplete
+\end{theorem}
+
+\noindent\textbf{Remark (i.i.d.\ observations):} \tocomplete
+
+\begin{lemma}[Lower Bound on $D_n$]
+\tocomplete
+\end{lemma}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:rate}]
+\tocomplete
+\end{proof}
+
+\begin{proposition}[Key Inequality]
+\tocomplete
+\end{proposition}
+
+\begin{corollary}[I.I.D.\ Case with the Hellinger or $L^1$ Distance]
+\tocomplete
+\end{corollary}
+\begin{proof}
+\tocomplete
+\end{proof}
+
+\subsection{Consequence on the Convergence of the Posterior Mean}
+\tocomplete
+
+\noindent\textbf{Remark (unbounded parameter space):} \tocomplete
+
+\begin{example}[Contraction Rate in the Normal Location Model]
+\tocomplete
+\end{example}
+
+\noindent\textbf{Exercise (contraction rate in linear regression):} \tocomplete
+
+\noindent\textbf{Exercise (nonparametric regression):} \tocomplete
 
 \end{document}
