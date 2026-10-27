@@ -769,7 +769,7 @@ then $\exists\, \phi_n$ s.t. $\phi_n \longrightarrow 0$ $P_{\theta_0}$ a.s. and
 \[ \sup_{\substack{\theta \in \Theta_n \\ d(\theta, \theta_0) > \varepsilon}} \mathbb{E}_\theta(1 - \phi_n) \le e^{-nC(\varepsilon)} \quad \text{for some } C(\varepsilon) > 0. \]
 \end{theorem}
 
-\begin{lemma}[Posterior consistency]\label{lem:consistency}
+\begin{lemma}[Posterior consistency] \label{lem:consistency}
 Assume that $\pi(\{\theta;\ \KL(\theta_0;\theta) < \varepsilon\}) > 0$ for all $\varepsilon > 0$ (hypothesis of Schwartz theorem) and that, for every $\varepsilon > 0$, there exist $\Theta_n \subset \Theta$ satisfying the entropy condition of Theorem~\ref{thm:tests} and $C > 0$ such that
 \[ \pi(\Theta_n^c) \le e^{-Cn}. \]
 Then the posterior is a.s. consistent at $\theta_0$:
@@ -951,13 +951,91 @@ So by Borel--Cantelli $\phi_n \xrightarrow[n\to\infty]{P_{\theta_0} \text{ a.s.}
 \end{proof}
 
 \subsection{Parametric Models}
-\tocomplete
+Let $X_1, \dots, X_n \overset{\text{iid}}{\sim} P_\theta$, $\theta \in \Theta \subset \mathbb{R}^p$.
 
-\begin{theorem}[Consistency in Parametric Models]
-\tocomplete
+Let $\pi$ be a prior on $\Theta$ with density w.r.t. the Lebesgue measure on $\mathbb{R}^p$ such that $\pi$ is strictly positive and continuous on $\Theta$. Assume that there exists a measure $\mu$ such that
+\[ \forall \theta \in \Theta, \quad \frac{dP_\theta}{d\mu} = f_\theta. \]
+
+\begin{theorem}[Consistency in Parametric Models] \label{thm:param}
+Let $d(f_1, f_2) := \|f_1 - f_2\|_1$ or $d_H(f_1, f_2)$. If:
+\begin{enumerate}
+    \item $\exists\, \gamma_1 > 0,\ \delta > 0$ s.t. $\forall \theta \in \Theta$:
+    \[ \|\theta - \theta_0\| < \delta \implies \KL(f_{\theta_0}, f_\theta) \le \|\theta - \theta_0\|^{\gamma_1} \]
+    \item $\exists\, \gamma_2 > 0$ s.t. $d(f_{\theta_1}, f_{\theta_2}) \le \|\theta_1 - \theta_2\|^{\gamma_2}$
+    \item $\exists\, \alpha > 0$ s.t. $\pi(\|\theta\| > x) \underset{x \to \infty}{\le} x^{-\alpha}$
+\end{enumerate}
+Then the posterior distribution is consistent at $\theta_0$ w.r.t. the metric $d$.
 \end{theorem}
 \begin{proof}
-\tocomplete
+The proof consists in proving the three conditions of the posterior consistency lemma (Lemma~\ref{lem:consistency}).
+
+\textbf{K-L condition}
+\begin{leftbar}
+We want to show:
+\[ \forall \varepsilon > 0, \quad \pi\big(\{\theta;\ \KL(f_{\theta_0}, f_\theta) < \varepsilon\}\big) > 0. \]
+Let $\varepsilon > 0$. We will use condition 1:
+\[ \|\theta - \theta_0\| < \delta \implies \KL(f_{\theta_0}, f_\theta) \le \|\theta - \theta_0\|^{\gamma_1} \]
+And we have:
+\[ \|\theta - \theta_0\|^{\gamma_1} < \varepsilon \iff \|\theta - \theta_0\| < \varepsilon^{1/\gamma_1} \]
+So for all $\theta$ s.t. $\|\theta - \theta_0\| < \min(\delta, \varepsilon^{1/\gamma_1})$, we get
+\[ \KL(f_{\theta_0}, f_\theta) \le \|\theta - \theta_0\|^{\gamma_1} < \varepsilon, \]
+i.e.
+\[ B\big(\theta_0, \min(\delta, \varepsilon^{1/\gamma_1})\big) \subset \{\theta : \KL(f_{\theta_0}, f_\theta) < \varepsilon\}. \]
+And since $\mathrm{Vol}\big(B(\theta_0, \min(\delta, \varepsilon^{1/\gamma_1}))\big) > 0$, we have $\mathrm{Vol}\big(\{\theta;\ \KL(f_{\theta_0}, f_\theta) < \varepsilon\}\big) > 0$.
+
+And since $\pi(x) > 0$ $\forall x \in \Theta$ and $\pi$ is continuous,
+\[ \pi\big(\{\theta : \KL(f_{\theta_0}, f_\theta) < \varepsilon\}\big) > 0. \]
+\end{leftbar}
+
+\textbf{Covering condition}
+\begin{leftbar}
+Let $\Theta_n := \{\|\theta\| \le R_n\}$ with $R_n$ to be determined later. We want to prove that
+\[ \log N\Big(\frac{\varepsilon}{4}, \mathcal{P}_{\Theta_n}, \|\cdot\|_1\Big) \le \frac{n\varepsilon^2}{16}. \]
+\textbf{Let's prove that} $\forall u > 0$, $N(u, \mathcal{P}_{\Theta_n}, d) \le N(u^{1/\gamma_2}, \Theta_n, \|\cdot\|)$.
+\begin{leftbar}
+Let $u > 0$ and $N := N(u^{1/\gamma_2}, \Theta_n, \|\cdot\|)$, with $\theta_1, \dots, \theta_N$ the centers of the corresponding balls.
+
+Let $\theta \in \Theta_n$: $\exists\, j \in \{1, \dots, N\}$ s.t. $\|\theta - \theta_j\| < u^{1/\gamma_2}$.
+
+Recall assumption 2:
+\[ \exists\, \gamma_2 > 0 \text{ s.t. } d(f_\theta, f_{\theta_j}) \le \|\theta - \theta_j\|^{\gamma_2}, \quad \text{i.e. } d(f_\theta, f_{\theta_j})^{1/\gamma_2} \le \|\theta - \theta_j\|. \]
+So
+\[ d(f_\theta, f_{\theta_j})^{1/\gamma_2} \le \|\theta - \theta_j\| \le u^{1/\gamma_2}, \quad \text{so} \quad d(f_\theta, f_{\theta_j}) \le u. \]
+So by taking $N$ balls of radius $u$, we can cover $\mathcal{P}_{\Theta_n}$ w.r.t. the metric $d$. So by minimality of $N(u, \mathcal{P}_{\Theta_n}, d)$:
+\[ N(u, \mathcal{P}_{\Theta_n}, d) \le N = N(u^{1/\gamma_2}, \Theta_n, \|\cdot\|). \]
+\end{leftbar}
+So if we find a way to control the covering number in the (Euclidean) space of parameters, we will control the covering number in the space of distributions.
+
+\begin{proposition}[Covering Number of a Ball (not demonstrated)]
+$\exists\, C > 0$ s.t. $\forall u > 0$, $\forall r > 0$:
+\[ N\big(u, B(0, r), \|\cdot\|\big) \le \Big(\frac{rC}{u}\Big)^p \quad \text{in } \mathbb{R}^p. \]
+\end{proposition}
+
+So
+\begin{align*}
+\log N\Big(\frac{\varepsilon}{4}, \mathcal{P}_{\Theta_n}, \|\cdot\|_1\Big) &\le \log N\Big(\Big(\frac{\varepsilon}{4}\Big)^{1/\gamma_2}, \gunderbrace{\Theta_n}{\annot{$B(0, R_n)$}}, \|\cdot\|\Big) \\
+&\overset{\annot{Prop}}{\le} \log\Bigg(\bigg(\frac{R_n C}{(\varepsilon/4)^{1/\gamma_2}}\bigg)^p\Bigg) = p \log R_n + \frac{p}{\gamma_2} \log\Big(\frac{4}{\varepsilon}\Big) + p \log C.
+\end{align*}
+So we want to have (asymptotically w.r.t. $n$):
+\[ p \log R_n + \frac{p}{\gamma_2} \log\Big(\frac{4}{\varepsilon}\Big) + p \log C \le \frac{n\varepsilon^2}{16}. \]
+Since $\frac{p}{\gamma_2} \log\big(\frac{4}{\varepsilon}\big) + p \log C$ does not depend on $n$, there exists $n_0$ such that it is $\le \frac{n\varepsilon^2}{32}$ for all $n \ge n_0$. So it suffices to have
+\[ p \log R_n \le \frac{n\varepsilon^2}{32}, \]
+which is equivalent to
+\[ R_n \le \exp\Big(\frac{n\varepsilon^2}{32p}\Big). \]
+We take
+\[ R_n := \exp\Big(\frac{n\varepsilon^2}{32p}\Big) \xrightarrow[n\to\infty]{} +\infty \]
+(we need $R_n \to \infty$ for the third condition). With this $R_n$ we obtain the covering condition: $\forall n \ge n_0$,
+\[ \log N\Big(\frac{\varepsilon}{4}, \mathcal{P}_{\Theta_n}, \|\cdot\|_1\Big) \le \frac{n\varepsilon^2}{16}. \]
+\end{leftbar}
+
+\textbf{Control on $\pi(\Theta_n^c)$ condition}
+\begin{leftbar}
+Recall assumption 3:
+\[ \exists\, \alpha > 0 \text{ s.t. } \pi(\|\theta\| > x) \underset{x \to \infty}{\le} x^{-\alpha}. \]
+Since $R_n \to \infty$, we can use it with $x \leftarrow R_n = \exp\big(\frac{n\varepsilon^2}{32p}\big)$: for $n$ large enough,
+\[ \pi\big(\gunderbrace{\Theta_n^c}{\annot{$\{\theta : \|\theta\| > R_n\}$}}\big) \le R_n^{-\alpha} = \exp\Big(-\frac{\alpha n\varepsilon^2}{32p}\Big). \]
+Which gives the third condition and finally the posterior consistency lemma, which yields the result.
+\end{leftbar}
 \end{proof}
 
 \begin{example}[Normal Location Model]
@@ -980,7 +1058,7 @@ So by Borel--Cantelli $\phi_n \xrightarrow[n\to\infty]{P_{\theta_0} \text{ a.s.}
 \tocomplete
 \end{intuition}
 
-\begin{theorem}[Posterior Contraction Rate]\label{thm:rate}
+\begin{theorem}[Posterior Contraction Rate] \label{thm:rate}
 \tocomplete
 \end{theorem}
 
