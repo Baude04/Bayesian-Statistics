@@ -22,6 +22,8 @@
 \newcommand{\gunderbrace}[2]{{\color{gray}\underbrace{\color{black}#1}_{#2}}}
 \newcommand{\circled}[1]{\tikz[baseline=(c.base)]\node[draw,circle,inner sep=0.6pt,font=\scriptsize](c){#1};}
 % Parties à rédiger à la main
+% Contrainte nommée (C_k) accumulée dans une preuve
+\newcommand{\constraint}[2]{\[ (\mathrm{C}_{#1}) \qquad #2 \]}
 \newcommand{\tocomplete}[1][]{\noindent\textcolor{red}{\textbf{TO COMPLETE\ifx&#1&\else: #1\fi}}}
 
 
@@ -770,19 +772,19 @@ then $\exists\, \phi_n$ s.t. $\phi_n \longrightarrow 0$ $P_{\theta_0}$ a.s. and
 \end{theorem}
 
 \begin{lemma}[Posterior consistency] \label{lem:consistency}
-Assume that $\pi(\{\theta;\ \KL(\theta_0;\theta) < \varepsilon\}) > 0$ for all $\varepsilon > 0$ (hypothesis of Schwartz theorem) and that, for every $\varepsilon > 0$, there exist $\Theta_n \subset \Theta$ satisfying the entropy condition of Theorem~\ref{thm:tests} and $C > 0$ such that
+Assume that $\pi(\{\theta;\ \KL(\theta_0;\theta) < \varepsilon\}) > 0$ for all $\varepsilon > 0$ (hypothesis of Schwartz theorem) and that, for every $\varepsilon > 0$, there exist $\Theta_n \subset \Theta$ satisfying the entropy condition of Theorem \ref{thm:tests} and $C > 0$ such that
 \[ \pi(\Theta_n^c) \le e^{-Cn}. \]
 Then the posterior is a.s. consistent at $\theta_0$:
 \[ \forall \varepsilon > 0, \quad \pi\big(\{\theta : d(\theta, \theta_0) > \varepsilon\} \,\big|\, X^{(n)}\big) \xrightarrow[n\to\infty]{} 0 \quad P_{\theta_0}^{\infty} \text{ a.s.} \]
 \end{lemma}
 
-\begin{proof}[Proof of Lemma~\ref{lem:consistency}]
+\begin{proof}[Proof of Lemma \ref{lem:consistency}]
 Let $\varepsilon > 0$ and $A_n := \Theta_n \cap \{\theta : d(\theta, \theta_0) > \varepsilon\}$. Since
 \[ \{\theta : d(\theta, \theta_0) > \varepsilon\} \subset A_n \cup \Theta_n^c, \]
 we have
 \[ \pi\big(\{\theta : d(\theta, \theta_0) > \varepsilon\} \,\big|\, X^{(n)}\big) \le \pi(A_n \mid X^{(n)}) + \pi(\Theta_n^c \mid X^{(n)}). \]
 \begin{itemize}
-    \item \underline{$A_n$}: by Theorem~\ref{thm:tests}, $\exists\, \phi_n \longrightarrow 0$ $P_{\theta_0}^{\infty}$ a.s. such that
+    \item \underline{$A_n$}: by Theorem \ref{thm:tests}, $\exists\, \phi_n \longrightarrow 0$ $P_{\theta_0}^{\infty}$ a.s. such that
     \[ \int_{A_n} \mathbb{E}_\theta^{(n)}(1 - \phi_n)\, d\pi(\theta) \le \pi(A_n) \sup_{\theta \in A_n} \mathbb{E}_\theta^{(n)}(1 - \phi_n) \le e^{-nC(\varepsilon)}, \]
     so by condition (i) of Schwartz theorem, $\pi(A_n \mid X^{(n)}) \longrightarrow 0$ $P_{\theta_0}^{\infty}$ a.s.
     \item \underline{$\Theta_n^c$}: since $\pi(\Theta_n^c) \le e^{-Cn}$, condition (ii) of Schwartz theorem gives $\pi(\Theta_n^c \mid X^{(n)}) \longrightarrow 0$ $P_{\theta_0}^{\infty}$ a.s.
@@ -792,7 +794,7 @@ Hence $\pi(\{\theta : d(\theta, \theta_0) > \varepsilon\} \mid X^{(n)}) \longrig
 
 \noindent\textbf{Remark (testing $H_0: \theta = \theta_0$ against $H_1: d(\theta, \theta_0) > \varepsilon$):} \tocomplete
 
-\begin{intuition}[Proof Intuition for Theorem~\ref{thm:tests}]
+\begin{intuition}[Proof Intuition for Theorem \ref{thm:tests}]
 Let $A_n := \Theta_n \cap \{\|f_\theta - f_{\theta_0}\|_1 > \varepsilon\}$. The proof consist in covering $A_n$ with a certain number of balls centered in $\theta_i$ with $i \in \{1, \dots, N(\varepsilon/4; A_n; \|\cdot\|_1)\}$, then on each of these balls we construct a local test, $\phi_{n,\theta_i}$, then by taking $\phi_n := \max_i \phi_{n,i}$, we got the good $\phi_n$.
 \begin{center}
 \begin{tikzpicture}[scale=0.9]
@@ -808,18 +810,30 @@ Let $A_n := \Theta_n \cap \{\|f_\theta - f_{\theta_0}\|_1 > \varepsilon\}$. The 
 \end{center}
 \end{intuition}
 
-\begin{proof}[Proof of Theorem~\ref{thm:tests}]
-\textbf{Construction and expectation bound on local tests.}
+\begin{proof}[Proof of Theorem \ref{thm:tests}]
+We do not fix the threshold $\Delta_n$ of the tests and the radius $\delta$ of the local balls now: as in an $\varepsilon$--$\delta$ proof, we write down the conditions they must satisfy along the way, as constraints $(\mathrm{C}_1), (\mathrm{C}_2), \dots$, and we solve this system at the end (Step 3). They may depend on $\varepsilon$ and $n$, but not on $\theta_1$ or $\theta$, so that all bounds are uniform.
+
+\textbf{Step 1: Construction and expectation bound on local tests.}
 \begin{leftbar}
 Let $\theta_1 \in \gunderbrace{A_n := \Theta_n \cap \{\|f_\theta - f_{\theta_0}\| > \varepsilon\}}{\annot{will be used for Schwartz thm}}$,
-\[ \phi_{n,\theta_1} := \ind_{\frac{1}{n}\left(\sum \ind_{R(\theta_1)}(X_i)\right) - P_{\theta_0}(R(\theta_1)) > \frac{\Delta_n(\theta_1)}{n}} \]
+\[ \phi_{n,\theta_1} := \ind\Big\{\sum_{i=1}^n \big(\ind_{R(\theta_1)}(X_i) - P_{\theta_0}(R(\theta_1))\big) > \Delta_n\Big\} \]
 with $R(\theta_1) := \{x : f_{\theta_1}(x) > f_{\theta_0}(x)\}$ \annot{($A(\theta_1)$ in Rousseau's notes)}.
+
+\textbf{Gap inequality.} Writing $R := R(\theta_1)$, we have
+\[ P_{\theta_1}(R) - P_{\theta_0}(R) = \frac{1}{2}\|f_{\theta_1} - f_{\theta_0}\|_1 > \frac{\varepsilon}{2}. \qquad \text{(G)} \]
+\begin{leftbar}
+$\int (f_{\theta_1} - f_{\theta_0})\, d\mu = 1 - 1 = 0$, so $P_{\theta_1}(R) - P_{\theta_0}(R) = \int_R (f_{\theta_1} - f_{\theta_0})\, d\mu = \int_{R^c} (f_{\theta_0} - f_{\theta_1})\, d\mu$.
+
+$f_{\theta_1} - f_{\theta_0} > 0$ on $R$ and $\le 0$ on $R^c$, so
+\[ \|f_{\theta_1} - f_{\theta_0}\|_1 = \int_R (f_{\theta_1} - f_{\theta_0})\, d\mu + \int_{R^c} (f_{\theta_0} - f_{\theta_1})\, d\mu = 2\big(P_{\theta_1}(R) - P_{\theta_0}(R)\big), \]
+which gives the equality; the inequality holds since $\theta_1 \in A_n$.
+\end{leftbar}
 
 \begin{intuition}[Intuition behind $\phi_{n,\theta_1}$]
 If $\theta_1 \neq \theta_0$, by the way $R(\theta_1)$ is defined, the proba under $P_{\theta_1}$ for falling in $R(\theta_1)$ is much larger than the proba under $P_{\theta_0}$ to fall in $R(\theta_1)$. So
-\[ \sum \ind_{R(\theta_1)}(X_i) - n P_{\theta_0}(R(\theta_1)) \longrightarrow
+\[ \frac{1}{n}\sum_{i=1}^n \ind_{R(\theta_1)}(X_i) - P_{\theta_0}(R(\theta_1)) \xrightarrow[\text{LLN}]{}
 \begin{cases}
-\infty & \text{under } P_{\theta_1} \text{ by LLN} \\
+> \frac{\varepsilon}{2} & \text{under } P_{\theta_1} \text{ (by (G))} \\
 0 & \text{under } P_{\theta_0}
 \end{cases} \]
 i.e.\quad
@@ -830,112 +844,105 @@ i.e.\quad
 \end{tikzpicture}
 \end{intuition}
 
-\textbf{Control of type I error} (i.e. $\mathbb{E}_{\theta_0}^{n}[\phi_{n,\theta_1}]$)
+\textbf{Step 1.1: Control of type I error} (i.e. $\mathbb{E}_{\theta_0}^{n}[\phi_{n,\theta_1}]$)
 \begin{leftbar}
-\[ \mathbb{E}_{\theta_0}^{n}[\phi_{n,\theta_1}] = P_{\theta_0}^{n}\Big(\sum \ind_{R(\theta_1)}(X_i) - n P_{\theta_0}(R(\theta_1)) > \Delta_n(\theta_1)\Big) \]
+\[ \mathbb{E}_{\theta_0}^{n}[\phi_{n,\theta_1}] = P_{\theta_0}^{n}\Big(\sum \big(\ind_{R(\theta_1)}(X_i) - P_{\theta_0}(R(\theta_1))\big) > \Delta_n\Big) \]
 \textbf{Hoeffding inequality:} if $Y_1, \dots, Y_n$ are $\perp\!\!\!\perp$ r.v. in
 \begin{leftbar}
-$[a_i, b_i]$ a.s. $\forall i \le n$ then
+$[a_i, b_i]$ a.s. $\forall i \le n$ then $\forall t > 0$
 \[ P\Big(\sum (Y_i - \mathbb{E}[Y_i]) \ge t\Big) \le \exp\Big(-\frac{2t^2}{\sum (b_i - a_i)^2}\Big) \]
 \end{leftbar}
 We use Hoeffding with
 \[ Y_i = \ind_{R(\theta_1)}(X_i) - P_{\theta_0}(R(\theta_1)) \in \big[-P_{\theta_0}(R(\theta_1));\ 1 - P_{\theta_0}(R(\theta_1))\big] \]
-and $t = \Delta_n > 0$, so we got:
-\[ \mathbb{E}_{\theta_0}^{n}[\phi_{n,\theta_1}] \le \exp\big(-2\Delta_n^2(\theta_1)/n\big) \]
+and $t = \Delta_n$, which requires
+\constraint{1}{\Delta_n > 0}
+\ Then:
+\[ \mathbb{E}_{\theta_0}^{n}[\phi_{n,\theta_1}] \le \exp\big(-2\Delta_n^2/n\big) \]
 \end{leftbar}
 
-\textbf{Control of type II error} (i.e. $\sup_\theta \mathbb{E}_\theta^{n}[1 - \phi_{n,\theta_1}]$)
+\textbf{Step 1.2: Control of type II error} (i.e. $\sup_\theta \mathbb{E}_\theta^{n}[1 - \phi_{n,\theta_1}]$)
 \begin{leftbar}
-Let $\theta$ be s.t. $\|f_\theta - f_{\theta_1}\|_1 \le \delta$ (we will set $\delta$ later).
+Let $\theta$ be s.t. $\|f_\theta - f_{\theta_1}\|_1 \le \delta$ (we will set $\delta$ later, so that it satisfies the constraints).
 \begin{align*}
-\mathbb{E}_\theta^{n}[1 - \phi_{n,\theta_1}] &= P_\theta^{n}\Big(\sum_{i=1}^{n} \ind_{R(\theta_1)}(X_i) - n P_{\theta_0}(R(\theta_1)) < \Delta_n(\theta_1)\Big) \\
+\mathbb{E}_\theta^{n}[1 - \phi_{n,\theta_1}] &= P_\theta^{n}\Big(\sum_{i=1}^{n} \ind_{R(\theta_1)}(X_i) - n P_{\theta_0}(R(\theta_1)) \le \Delta_n\Big) \\
 &\qquad \annot{$\downarrow + n P_{\theta_0}(R(\theta_1)) - n P_\theta(R(\theta_1))$} \\
 &= P_\theta^{n}\Big(\sum_{i=1}^{n} \ind_{R(\theta_1)}(X_i) - n P_\theta(R(\theta_1)) \\
-&\qquad\qquad < \Delta_n(\theta_1) + n\big(P_{\theta_0}(R(\theta_1)) - P_\theta(R(\theta_1))\big)\Big)
+&\qquad\qquad \le \Delta_n + n\big(P_{\theta_0}(R(\theta_1)) - P_\theta(R(\theta_1))\big)\Big)
 \end{align*}
 \textbf{(Reversed) Hoeffding inequality} (Proof: take $Y_i \leftarrow -Y_i$ in Hoeffding)
 \begin{leftbar}
 $[a_i, b_i]$ a.s. $\forall i \le n$ then $\forall t > 0$
-\[ P\Big(\sum (Y_i - \mathbb{E}[Y_i]) < -t\Big) \le \exp\Big(-\frac{2t^2}{\sum (b_i - a_i)^2}\Big) \]
+\[ P\Big(\sum (Y_i - \mathbb{E}[Y_i]) \le -t\Big) \le \exp\Big(-\frac{2t^2}{\sum (b_i - a_i)^2}\Big) \]
 \end{leftbar}
 We want to use Hoeffding inequality with
 \[ Y_i = \ind_{R(\theta_1)}(X_i) - P_\theta(R(\theta_1)) \in \big[-P_\theta(R(\theta_1));\ 1 - P_\theta(R(\theta_1))\big] \]
-and $-t = \Delta_n(\theta_1) + n\big(P_{\theta_0}(R(\theta_1)) - P_\theta(R(\theta_1))\big)$, so we need to have $t > 0$, i.e.
+and $-t = \Delta_n + n\big(P_{\theta_0}(R(\theta_1)) - P_\theta(R(\theta_1))\big)$, so we need to have $t > 0$, i.e.
 \begin{gather*}
-\Delta_n(\theta_1) + n\big(P_{\theta_0}(R) - P_\theta(R)\big) < 0 \\
-\text{i.e.} \quad \Delta_n(\theta_1) < n\big(P_\theta(R) - P_{\theta_0}(R)\big)
+\Delta_n + n\big(P_{\theta_0}(R) - P_\theta(R)\big) < 0 \\
+\text{i.e.} \quad \Delta_n < n\big(P_\theta(R) - P_{\theta_0}(R)\big)
 \end{gather*}
-Since $\Delta_n(\theta_1) > 0$, we need to have $P_\theta(R) - P_{\theta_0}(R) > 0$.
+
 
 \textbf{Lower bound (not depending on $\theta$) of $P_\theta(R) - P_{\theta_0}(R)$}
 \begin{leftbar}
 ($R := R(\theta_1)$)
 \begin{align*}
 P_\theta(R) - P_{\theta_0}(R) &= P_{\theta_1}(R) - P_{\theta_0}(R) + P_\theta(R) - P_{\theta_1}(R) \\
-&= \underbrace{\int_R (f_{\theta_1} - f_{\theta_0})\, d\mu}_{= \frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1} + \gunderbrace{\int_R (f_\theta - f_{\theta_1})\, d\mu}{|\cdot| \le \frac{1}{2}\|f_{\theta_1} - f_\theta\|_1 \le \frac{\delta}{2}\ \annot{(cond. on $\theta$)}} \\
-&\overset{\circled{1}}{\ge} \frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 - \frac{\delta}{2} \quad \annot{$> 0$ $\leftarrow$ what we want}
+&= \underbrace{\int_R (f_{\theta_1} - f_{\theta_0})\, d\mu}_{= \frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 \text{ by (G)}} + \gunderbrace{\int_R (f_\theta - f_{\theta_1})\, d\mu}{|\cdot| \le \frac{1}{2}\|f_{\theta_1} - f_\theta\|_1 \le \frac{\delta}{2}\ \annot{(cond. on $\theta$)}} \\
+&\overset{}{\ge} \frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 - \frac{\delta}{2}  \\
+&{> \frac{\varepsilon - \delta}{2} \qquad \text{(by (G))}}
 \end{align*}
+This bound depends neither on $\theta$ nor on $\theta_1$.
 \end{leftbar}
-So in order to have $t > 0$, one can take
-\[ \begin{cases}
-\delta < \|f_{\theta_0} - f_{\theta_1}\| \\
-\Delta_n < n\big(\frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 - \frac{\delta}{2}\big)
-\end{cases} \]
-So the Hoeffding inequality with such $\delta$ and $\Delta_n$ gives:
-\[ \mathbb{E}_\theta^{n}[1 - \phi_{n,\theta_1}] \le \exp\Bigg(-\frac{2\Big[\Delta_n(\theta_1) - n\big(P_\theta(R) - P_{\theta_0}(R)\big)\Big]^2}{n}\Bigg). \]
-Since
-\[ \Delta_n(\theta_1) - n\big(P_\theta(R) - P_{\theta_0}(R)\big) \overset{\circled{1}}{\le} \Delta_n - n\Big(\frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 - \frac{\delta}{2}\Big) \le 0 \]
-and $\exp(-\cdot^2)$ is increasing on $\mathbb{R}_-$, we got:
-\begin{align*}
-\mathbb{E}_\theta^{n}[1 - \phi_{n,\theta_1}] &\le \exp\Bigg(-\frac{2\Big(\Delta_n - n\big(\frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 - \frac{\delta}{2}\big)\Big)^2}{n}\Bigg) \\
-&= \exp\Big(-2n\Big(\frac{\Delta_n}{n} - \frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 + \frac{\delta}{2}\Big)^2\Big)
-\end{align*}
-We want $\dfrac{\Delta_n}{n} - \dfrac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 + \dfrac{\delta}{2} < c < 0$.
+So $t > 0$ holds as soon as
+\constraint{2}{\Delta_n < n\,\frac{\varepsilon - \delta}{2}}
+and then, since $t > n\frac{\varepsilon - \delta}{2} - \Delta_n > 0$,
+\[ \sup_{\theta \,:\, \|f_\theta - f_{\theta_1}\|_1 \le \delta} \mathbb{E}_\theta^{n}[1 - \phi_{n,\theta_1}] \le \exp\Big(-\frac{2}{n}\Big(n\,\frac{\varepsilon - \delta}{2} - \Delta_n\Big)^2\Big). \]
+\end{leftbar}
 
-We want to find a solution to the following system in $\delta$ and $\Delta_n$ that don't depend on $\theta_1$, so that we can have a uniform bound:
-\[ \begin{cases}
-\dfrac{\Delta_n}{n} - \dfrac{1}{2}\|f_{\theta_0} - f_{\theta_1}\| + \dfrac{\delta}{2} < c < 0 & (1) \\[8pt]
-\delta \le \underbrace{\|f_{\theta_0} - f_{\theta_1}\|}_{> \varepsilon} & (2) \\[8pt]
-\Delta_n < n\big(\frac{1}{2}\|f_{\theta_0} - f_{\theta_1}\|_1 - \frac{\delta}{2}\big) & (3)\ (\Leftarrow (1)) \\[4pt]
-\Delta_n > 0 & (4) \\[4pt]
-\Delta_n^2 > n^2 C_2, \quad \exists\, C_2 > 0 \ (\text{for type I control}) & (5)
-\end{cases} \]
-For $\delta = \dfrac{\varepsilon}{4}$, $\Delta_n = n\dfrac{\varepsilon}{4}$:
-\[ \Longleftarrow \begin{cases}
-(1)\quad \dfrac{\varepsilon}{4} - \dfrac{1}{2}\|f_{\theta_0} - f_{\theta_1}\| + \dfrac{\varepsilon}{8} \underset{\|f_{\theta_0} - f_{\theta_1}\| > \varepsilon}{<} -\dfrac{\|f_{\theta_0} - f_{\theta_1}\|}{4} + \dfrac{\varepsilon}{8} < 0 \quad \checkmark \\[10pt]
-(3),\ (2),\ (4),\ (5) \quad \checkmark
-\end{cases} \]
-So we get $\forall \theta \in B_{\|\cdot\|_1}(\theta_1, \delta)$,
-\[ \mathbb{E}_\theta^{(n)}[1 - \phi_{n,\theta_1}] \le \exp(-2nc) \]
-so
-\[ \sup_{\theta \text{ s.t. } \|f_\theta - f_{\theta_1}\|_1 < \delta} \mathbb{E}_\theta^{(n)}[1 - \phi_{n,\theta_1}] \le \exp(-2nc) \]
-\end{leftbar}
-and
-\[ \mathbb{E}_{\theta_0}^{(n)}[\phi_{n,\theta_1}] \le \exp(-2nC_2) \]
 \end{leftbar}
 
 \medskip
-\textbf{Global control of type I and II errors}
+\textbf{Step 2: Global control of type I and II errors}
 \begin{leftbar}
-Let $(\theta_j)_{j=1}^{N_n}$ be a covering of $A_n$ by balls of radius $\delta = \frac{\varepsilon}{4}$ (with $N_n$ covering number $< \infty$).
+By hypothesis, $\mathcal{P}_{\Theta_n}$ is covered by $N_n \le e^{n\varepsilon^2/16}$ balls of radius $\frac{\varepsilon}{4}$. In each ball meeting $\{f_\theta, \theta \in A_n\}$ we pick a new centre $f_{\theta_j}$ with $\theta_j \in A_n$ (needed in Step 1.2); the ball is then contained in $\{\theta : \|f_\theta - f_{\theta_j}\|_1 \le \frac{\varepsilon}{2}\}$. To apply Step 1.2 on these sets we need
+\constraint{3}{\delta \ge \frac{\varepsilon}{2}}
 
 Let $\phi_n := \max_{j \le N_n} \phi_{n,\theta_j}$.
 
-\textbf{Type I control:}
+\textbf{Step 2.1: Type I control:}
 \begin{leftbar}
 then
-\[ \mathbb{E}_{\theta_0}^{(n)}[\phi_n] \le \sum_{j=1}^{N_n} \mathbb{E}_{\theta_0}^{(n)}[\phi_{n,\theta_j}] \le N_n \exp(-2nC_2) \]
-So by Borel--Cantelli $\phi_n \xrightarrow[n\to\infty]{P_{\theta_0} \text{ a.s.}} 0$.
+\[ \mathbb{E}_{\theta_0}^{(n)}[\phi_n] \le \sum_{j=1}^{N_n} \mathbb{E}_{\theta_0}^{(n)}[\phi_{n,\theta_j}] \le N_n\, e^{-2\Delta_n^2/n} \le \exp\Big(\frac{n\varepsilon^2}{16} - \frac{2\Delta_n^2}{n}\Big). \]
+For Borel--Cantelli this must be summable, so the exponent must be negative (of order $-n$):
+\constraint{4}{\Delta_n > n\,\frac{\varepsilon}{4\sqrt{2}}}
+Then, since $\phi_n \in \{0, 1\}$, $\sum_n P_{\theta_0}(\phi_n = 1) < \infty$, and by Borel--Cantelli $\phi_n \xrightarrow[n\to\infty]{P_{\theta_0} \text{ a.s.}} 0$.
 \end{leftbar}
-\textbf{Type II control:}
+\textbf{Step 2.2: Type II control:}
 \begin{leftbar}
 \begin{align*}
-\sup_{\theta \in A_n} \mathbb{E}_\theta[1 - \phi_n] &= \sup_j \sup_{\theta : \|f_\theta - f_{\theta_j}\|_1 < \delta} \mathbb{E}_\theta[1 - \phi_n] \\
-&\le \sup_j \exp(-2nc)
+\sup_{\theta \in A_n} \mathbb{E}_\theta[1 - \phi_n] &= \sup_j \sup_{\theta : \|f_\theta - f_{\theta_j}\|_1 \le \delta} \mathbb{E}_\theta[1 - \phi_n] \\
+&\le \sup_j \ {\sup_{\theta : \|f_\theta - f_{\theta_j}\|_1 \le \delta} \mathbb{E}_\theta[1 - \phi_{n,\theta_j}]} \\
+&{\le \exp\Big(-\frac{2}{n}\Big(n\,\frac{\varepsilon - \delta}{2} - \Delta_n\Big)^2\Big)}
 \end{align*}
 \end{leftbar}
 \end{leftbar}
+
+\medskip
+\textbf{Step 3: Solving the constraints}
+\begin{leftbar}
+\[ (\mathrm{C}_1)\ \Delta_n > 0, \qquad (\mathrm{C}_2)\ \Delta_n < n\,\frac{\varepsilon - \delta}{2}, \qquad (\mathrm{C}_3)\ \delta \ge \frac{\varepsilon}{2}, \qquad (\mathrm{C}_4)\ \Delta_n > n\,\frac{\varepsilon}{4\sqrt{2}}. \]
+A small $\delta$ leaves more room in $(\mathrm{C}_2)$, so we take the smallest value allowed by $(\mathrm{C}_3)$: $\boxed{\delta = \frac{\varepsilon}{2}}$. The constraints on $\Delta_n$ become
+\[ n\,\frac{\varepsilon}{4\sqrt{2}} < \Delta_n < n\,\frac{\varepsilon}{4}, \]
+a non-empty interval since $\sqrt{2} > 1$. We take $\boxed{\Delta_n = \frac{n\varepsilon}{5}}$. Then:
+\begin{itemize}
+    \item type I: $\mathbb{E}_{\theta_0}^{(n)}[\phi_n] \le \exp\big(\frac{n\varepsilon^2}{16} - \frac{2n\varepsilon^2}{25}\big) = e^{-\frac{7}{400} n\varepsilon^2}$, so by Borel--Cantelli $\phi_n \to 0$ $P_{\theta_0}$ a.s.;
+    \item type II: $\displaystyle\sup_{\theta \in A_n} \mathbb{E}_\theta(1 - \phi_n) \le \exp\Big(-\frac{2}{n}\Big(\frac{n\varepsilon}{4} - \frac{n\varepsilon}{5}\Big)^2\Big) = e^{-nC(\varepsilon)}$ with $C(\varepsilon) = \frac{\varepsilon^2}{200}$.
+\end{itemize}
+\end{leftbar}
 \end{proof}
+
+\noindent\textbf{Remark.} The $16$ of the entropy condition is what makes the system solvable: with $\frac{n\varepsilon^2}{8}$ instead, $(\mathrm{C}_4)$ would read $\Delta_n > \frac{n\varepsilon}{4}$, incompatible with $(\mathrm{C}_2)$.
 
 \subsubsection{Hellinger Tests}
 
@@ -967,7 +974,7 @@ Let $d(f_1, f_2) := \|f_1 - f_2\|_1$ or $d_H(f_1, f_2)$. If:
 Then the posterior distribution is consistent at $\theta_0$ w.r.t. the metric $d$.
 \end{theorem}
 \begin{proof}
-The proof consists in proving the three conditions of the posterior consistency lemma (Lemma~\ref{lem:consistency}).
+The proof consists in proving the three conditions of the posterior consistency lemma (Lemma \ref{lem:consistency}).
 
 \textbf{K-L condition}
 \begin{leftbar}
@@ -1071,7 +1078,7 @@ Which gives the third condition and finally the posterior consistency lemma, whi
 \tocomplete
 \end{proof}
 
-\begin{proof}[Proof of Theorem~\ref{thm:rate}]
+\begin{proof}[Proof of Theorem \ref{thm:rate}]
 \tocomplete
 \end{proof}
 
